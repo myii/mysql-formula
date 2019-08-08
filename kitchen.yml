@@ -138,6 +138,7 @@ suites:
       state_top:
         base:
           '*':
+            - mysql.yaml_dump
             - mysql
       pillars:
         top.sls:
