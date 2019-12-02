@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Disable `shellcheck` rule `SC2154` until a fix can be tested on MacOS
+# shellcheck disable=SC2154
 
 CMD='/usr/bin/osascript -e'
 
