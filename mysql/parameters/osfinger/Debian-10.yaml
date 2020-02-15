@@ -1,0 +1,11 @@
+---
+values:
+  serverpkg: mariadb-server
+  service: mariadb
+  clientpkg: mariadb-client
+  devpkg: libmariadbclient-dev
+  config:
+    append: |
+      !includedir /etc/mysql/conf.d/
+      # !includedir /etc/mysql/mariadb.conf.d/
+...

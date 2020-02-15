@@ -1,0 +1,13 @@
+---
+values:
+  service: mysql
+  devpkg: libmysqlclient-dev
+  config:
+    sections:
+      mysqld:
+        tmpdir: /tmp
+        log_error: /var/log/mysql/error.log
+    append: |
+      !includedir /etc/mysql/conf.d/
+
+...

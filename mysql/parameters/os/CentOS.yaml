@@ -1,0 +1,14 @@
+---
+values:
+  config_directory: /etc/my.cnf.d/
+  server_config:
+    file: server.cnf
+    sections:
+      mysqld_safe:
+        log_error: /var/log/mysql/mysqld.log
+        pid_file: /var/run/mysql/mysqld.pid
+      mysqld:
+        socket: /var/lib/mysql/mysql.sock
+        bind_address: 127.0.0.1
+
+...

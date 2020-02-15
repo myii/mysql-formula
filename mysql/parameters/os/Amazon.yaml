@@ -1,0 +1,6 @@
+---
+values:
+  clientpkg: mysql
+  service: mysqld
+  pythonpkg: MySQL-python
+...

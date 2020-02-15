@@ -1,0 +1,45 @@
+---
+values:
+  serverpkg: mysql56-server
+  clientpkg: mysql56-client
+  service: mysql-server
+  pythonpkg: py27-pymysql
+  devpkg: mysql56-server
+
+  config:
+    file: /usr/local/etc/my.cnf
+    sections:
+      client:
+        socket: /tmp/mysql.sock
+      mysqld:
+        # Empty values below to be resolved, disabling the rule in the meantime
+        # yamllint disable rule:empty-values
+        user:
+        datadir:
+        # yamllint enable rule:empty-values
+        socket: /tmp/mysql.sock
+        skip-external-locking: noarg_present
+        key_buffer_size: 16M
+        max_allowed_packet: 1M
+        table_open_cache: 64
+        sort_buffer_size: 512K
+        net_buffer_length: 8K
+        read_buffer_size: 256K
+        read_rnd_buffer_size: 512K
+        myisam_sort_buffer_size: 8M
+        log-bin: mysql-bin
+        binlog_format: mixed
+        server-id: 1
+      mysqldump:
+        quick: noarg_present
+        max_allowed_packet: 16M
+      mysql:
+        no-auto-rehash: noarg_present
+      myisamchk:
+        key_buffer_size: 20M
+        sort_buffer_size: 20M
+        read_buffer: 2M
+        write_buffer: 2M
+      mysqlhotcopy:
+        interactive-timeout: noarg_present
+...

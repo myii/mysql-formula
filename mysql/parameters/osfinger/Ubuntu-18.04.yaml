@@ -1,0 +1,6 @@
+---
+values:
+  serverpkg: mariadb-server
+  # service: mariadb
+  clientpkg: mariadb-client
+...

@@ -1,0 +1,18 @@
+---
+values:
+  service: mysqld
+  clientpkg: mysql
+  pythonpkg: MySQL-python
+  config:
+    file: /etc/my.cnf
+    sections:
+      client: {}
+      mysqld_safe:
+        log_error: /var/log/mysql/mysqld.log
+        pid_file: /var/run/mysql/mysqld.pid
+      mysqld:
+        socket: /var/lib/mysql/mysql.sock
+        bind_address: 127.0.0.1
+        symbolic_links: 0
+
+...

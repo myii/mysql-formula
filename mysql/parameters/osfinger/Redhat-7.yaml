@@ -1,0 +1,13 @@
+---
+values:
+  # https://mariadb.com/blog/rhel7-transition-mysql-mariadb-first-look
+  serverpkg: mariadb-server
+  service: mariadb
+  clientpkg: mariadb
+  devpkg: mariadb-devel
+  config:
+    sections:
+      mysqld_safe:
+        log_error: /var/log/mariadb/mysqld.log
+        pid_file: /var/run/mariadb/mysqld.pid
+...
