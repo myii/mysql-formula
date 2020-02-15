@@ -45,7 +45,17 @@
 
 {%- for map_source in map_sources %}
   {# Lookup the grain/pillar/... #}
+  {# Fallback to use the source name as a direct filename #}
   {%- set map_values = salt['config.get'](map_source, []) %}
+
+  {# Mangle `map_source` to use it as literal path #}
+  {%- if map_values|length == 0 %}
+    {%- set map_source_parts = map_source.split('/') %}
+    {%- set map_source = map_source_parts[0:-1] | join('/') %}
+    {%- set map_values = map_source_parts[-1].rstrip('.yaml') %}
+  {%- endif %}
+
+  {# Some configuration return list #}
   {%- if map_values is string %}
     {%- set map_values = [map_values] %}
   {%- endif %}
