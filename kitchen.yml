@@ -160,7 +160,7 @@ suites:
       state_top:
         base:
           '*':
-            - mysql
+            - mysql.yaml_dump
       pillars:
         top.sls:
           base:
