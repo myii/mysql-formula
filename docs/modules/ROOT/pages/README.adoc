@@ -1,0 +1,195 @@
+= mysql-formula
+
+https://travis-ci.com/saltstack-formulas/mysql-formula[image:https://travis-ci.com/saltstack-formulas/mysql-formula.svg?branch=master[Travis CI Build Status]]
+https://github.com/semantic-release/semantic-release[image:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg[Semantic Release]]
+
+Install the MySQL client and/or server on Linux and MacOS.
+
+== General notes
+
+See the full
+https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html[SaltStack
+Formulas installation and usage instructions].
+
+If you are interested in writing or contributing to formulas, please pay
+attention to the
+https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#writing-formulas[Writing
+Formula Section].
+
+If you want to use this formula, please pay attention to the `FORMULA`
+file and/or `git tag`, which contains the currently released version.
+This formula is versioned according to http://semver.org/[Semantic
+Versioning].
+
+See
+https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#versioning[Formula
+Versioning Section] for more details.
+
+== Contributing to this repo
+
+*Commit message formatting is significant!!*
+
+Please see
+xref:main::CONTRIBUTING.adoc[How
+to contribute] for more details.
+
+== Available states
+
+=== `mysql`
+
+Meta-state including all server packages in correct order. This
+meta-state does *not* include `mysql.remove_test_database`.
+
+=== `mysql.macos`
+
+Install "MySQL Community Server", "MySQL Workbench", and other related
+mysql products on MacOS (and create Desktop shortcuts).
+
+=== `mysql.macos.remove`
+
+Remove "MySQL Community Server", "MySQL Workbench", and any other
+enabled products from MacOS.
+
+=== `mysql.client`
+
+Install the MySQL client package on Linux.
+
+=== `mysql.server`
+
+Install the MySQL server package and start the service.
+
+Debian OS family supports setting MySQL root password during install via
+debconf.
+
+Note
+
+If no root password is provided in the pillar, a random one will be
+created. Because Hydrogen doesn't have easy access to a random function
+(test.rand_str isn't introduced until Helium), instead, we use the
+not-at-all random `grains.server_id`. As this is cryptographically
+insecure, future formula versions should use the newly available
+`random.get_str` method.
+
+=== `mysql.server_checks`
+
+Enforces a root password to be set.
+
+=== `mysql.disabled`
+
+Ensure that the MySQL service is not running.
+
+=== `mysql.database`
+
+Create and manage MySQL databases.
+
+=== `mysql.python`
+
+Install mysql python bindings.
+
+=== `mysql.user`
+
+Create and manage MySQL database users with definable GRANT privileges.
+
+The state accepts MySQL hashed passwords or clear text. Hashed password
+have priority.
+
+Note
+
+See the
+http://docs.saltstack.com/en/latest/ref/states/all/salt.states.mysql_user.html#module-salt.states.mysql_user[salt.states.mysql_user]
+docs for additional information on configuring hashed passwords.
+
+Make sure to *quote the passwords* in the pillar so YAML doesn't throw
+an exception.
+
+=== `mysql.remove_test_database`
+
+Warning
+
+Do not use this state if your MySQL instance has a database in use
+called `test`. If you do, it will be irrevocably removed!
+
+Remove the database called `test`, normally created as part of a default
+MySQL installation. This state is *not* included as part of the
+meta-state above as this name may conflict with a real database.
+
+=== `mysql.dev`
+
+Install the MySQL development libraries and header files.
+
+Note
+
+Note that this state is not installed by the mysql meta-state unless you
+set your pillar data accordingly.
+
+=== `mysql.repo`
+
+Add the official MySQL 5.7 repository.
+
+Note
+
+Note that this state currently only supports MySQL 5.7 for RHEL systems.
+Debian and Suse support to be added. Also need to add the option to
+allow selection of MySQL version (5.6 and 5.5 repos are added but
+disabled) and changed enabled repository accordingly.
+
+=== `mysql.config`
+
+Manage the MySQL configuration.
+
+Note
+
+There are currently two common ways to configure MySQL, a monolithic
+configuration file or a configuration directory with configuration files
+per component. By default this state will use a configuration directory
+for CentOS and Fedora, and a monolithic configuration file for all other
+supported OSes.
+
+Whether the configuration directory is used or not depends on whether
+[.title-ref]#mysql.config_directory# is defined in the pillar. If it is
+present it will pick the configuration from individual component keys
+([.title-ref]#mysql.server#, [.title-ref]#mysql.galera#,
+[.title-ref]#mysql.libraries#, etc) with optional global configuration
+from [.title-ref]#mysql.global#. The monolithic configuration, however,
+is defined separately in [.title-ref]#mysql.config#.
+
+== Testing
+
+Linux testing is done with `kitchen-salt`.
+
+=== Requirements
+
+* Ruby
+* Docker
+
+[source,bash]
+----
+$ gem install bundler
+$ bundle install
+$ bin/kitchen test [platform]
+----
+
+Where `[platform]` is the platform name defined in `kitchen.yml`, e.g.
+`debian-9-2019-2-py3`.
+
+=== `bin/kitchen converge`
+
+Creates the docker instance and runs the `mysql` main state, ready for
+testing.
+
+=== `bin/kitchen verify`
+
+Runs the `inspec` tests on the actual instance.
+
+=== `bin/kitchen destroy`
+
+Removes the docker instance.
+
+=== `bin/kitchen test`
+
+Runs all of the stages above in one go: i.e. `destroy` + `converge` +
+`verify` + `destroy`.
+
+=== `bin/kitchen login`
+
+Gives you SSH access to the instance for manual testing.
